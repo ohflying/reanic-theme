@@ -20,6 +20,17 @@ class Theme {
         _watchers.forEach(watcher => watcher());
     }
 
+    static vars(themeVars: Object): VarGetter {
+        return {
+            get: (name: string) => {
+                return _vars[name] || themeVars[name];
+            },
+            has: (name: string) => {
+                return _vars.hasOwnProperty(name) || themeVars.hasOwnProperty(name);
+            }
+        };
+    }
+
     static watch(watcher: Watcher): Disposer {
         if (_watchers.includes(watcher)) {
             _watchers.push(watcher);
@@ -34,14 +45,7 @@ class Theme {
     }
 
     static style<S: Object>(props: Object, styleConfig: ComponentStyle, themeVars: Object, prefix: string): {[key: $Keys<S>]: any} {
-        let varGetter: VarGetter = {
-            get: (name) => {
-                return _vars[name] || themeVars[name];
-            },
-            has: (name) => {
-                return _vars.hasOwnProperty(name) || themeVars.hasOwnProperty(name);
-            }
-        };
+        let varGetter: VarGetter = Theme.vars(themeVars);
         return buildStyle(varGetter, props, styleConfig, prefix);
     }
 }
