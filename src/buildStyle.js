@@ -59,7 +59,7 @@ class StyleConfigBuilder {
     }
 
     build(styleConfig: StyleConfig, prefix: string) {
-        return this._build(styleConfig, [prefix]);
+        return this._build(styleConfig, prefix ? [prefix] : []);
     }
 }
 

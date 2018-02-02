@@ -12,8 +12,8 @@ import hoistStatics from 'hoist-non-react-statics';
 import Theme from './theme';
 import type {Disposer, ComponentStyle} from './TypeDefinition';
 
-export default function connectStyle<S: Object>(Component: Class<React$Component<*>>, styleConfig: ComponentStyle): (themeVars: Object, prefix: string) => {[$Keys<S>]: any} {
-    return function wrap<S: Object>(themeVars: Object, prefix: string): Class<React$Component<*>> {
+export default function connectStyle<S: Object>(Component: Class<React$Component<*>>, styleConfig: ComponentStyle): (themeVars: Object) => {[$Keys<S>]: any} {
+    return function wrap<S: Object>(themeVars: Object): Class<React$Component<*>> {
         class StyleComponent extends React.PureComponent<any, any> {
             static propTypes = {
                 styles: PropTypes.object
@@ -30,7 +30,7 @@ export default function connectStyle<S: Object>(Component: Class<React$Component
                 super(props, context);
 
                 this.state = {
-                    styles: Theme.style(props, styleConfig, themeVars, prefix)
+                    styles: Theme.style(props, styleConfig, themeVars)
                 };
             }
 
@@ -49,7 +49,7 @@ export default function connectStyle<S: Object>(Component: Class<React$Component
             }
 
             tryResetStyle(props: any) {
-                let nextStyle = Theme.style(props, styleConfig, themeVars, prefix);
+                let nextStyle = Theme.style(props, styleConfig, themeVars);
                 if (_.isEqual(nextStyle, this.state.styles)) {
                     this.setState({
                         styles: nextStyle

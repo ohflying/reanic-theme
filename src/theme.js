@@ -20,7 +20,7 @@ class Theme {
         _watchers.forEach(watcher => watcher());
     }
 
-    static vars(varsOrInitializer: VarsOrInitializer): () => Object {
+    static vars(varsOrInitializer: VarsOrInitializer, prefix: ?string = null): () => Object {
         let tempVars = null;
 
         Theme.watch(() => {
@@ -32,6 +32,8 @@ class Theme {
                 tempVars = typeof varsOrInitializer === 'function'
                     ? varsOrInitializer(_vars)
                     : varsOrInitializer;
+
+                tempVars.__prefix = prefix;
             }
 
             return tempVars;
@@ -51,7 +53,7 @@ class Theme {
         };
     }
 
-    static style<S: Object>(props: Object, styleConfig: ComponentStyle, themeVars: Object, prefix: string): {[key: $Keys<S>]: any} {
+    static style<S: Object>(props: Object, styleConfig: ComponentStyle, themeVars: Object): {[key: $Keys<S>]: any} {
         let varGetter: VarGetter = {
             get: (name: string) => {
                 return _vars[name] || themeVars[name];
@@ -60,7 +62,7 @@ class Theme {
                 return _vars.hasOwnProperty(name) || themeVars.hasOwnProperty(name);
             }
         };
-        return buildStyle(varGetter, props, styleConfig, prefix);
+        return buildStyle(varGetter, props, styleConfig, themeVars.__prefix);
     }
 }
 
