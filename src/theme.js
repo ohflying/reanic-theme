@@ -41,7 +41,7 @@ class Theme {
     }
 
     static watch(watcher: Watcher): Disposer {
-        if (_watchers.includes(watcher)) {
+        if (!_watchers.includes(watcher)) {
             _watchers.push(watcher);
         }
 
