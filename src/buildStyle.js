@@ -68,7 +68,7 @@ export default function buildStyle<S>(varGetter: VarGetter, props: Object, style
     let builder = new StyleConfigBuilder(varGetter, props);
     return Object.keys(styleConfig).map((key: string) => {
         let style = builder.build(styleConfig[key], prefix);
-        return Object.assign({}, style, propStyles[key]);
+        return Object.assign({[key]: style}, propStyles[key]);
     }).reduce((prevStyle, curStyle) => {
         return Object.assign(prevStyle, curStyle);
     }, {});
