@@ -60,6 +60,16 @@ export default function connectStyle<S: Object>(Component: Class<React$Component
             onThemeWatch = () => {
                 this.tryResetStyle(this.props);
             };
+
+            render() {
+                let styles = _.merge(this.state.styles, this.props.styles);
+                return (
+                    <Component
+                        {...this.props}
+                        styles={styles}
+                    />
+                );
+            }
         }
 
         return hoistStatics(Component, StyleComponent);
