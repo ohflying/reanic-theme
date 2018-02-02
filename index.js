@@ -9,6 +9,7 @@ import Theme from './src/theme';
 import connectStyle from './src/connectStyle';
 
 export {
-    Theme,
     connectStyle
 };
+
+export default Theme;

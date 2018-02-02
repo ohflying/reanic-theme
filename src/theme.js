@@ -5,7 +5,7 @@
  **/
 
 import buildStyle from './buildStyle';
-import type {ComponentStyle, Watcher, Disposer, VarGetter} from './TypeDefinition';
+import type {ComponentStyle, Watcher, Disposer, VarGetter, VarsOrInitializer} from './TypeDefinition';
 
 let _vars = {};
 const _watchers = [];
@@ -20,14 +20,21 @@ class Theme {
         _watchers.forEach(watcher => watcher());
     }
 
-    static vars(themeVars: Object): VarGetter {
-        return {
-            get: (name: string) => {
-                return _vars[name] || themeVars[name];
-            },
-            has: (name: string) => {
-                return _vars.hasOwnProperty(name) || themeVars.hasOwnProperty(name);
+    static vars(varsOrInitializer: VarsOrInitializer): () => Object {
+        let tempVars = null;
+
+        Theme.watch(() => {
+            tempVars = null;
+        });
+
+        return () => {
+            if (!tempVars) {
+                tempVars = typeof varsOrInitializer === 'function'
+                    ? varsOrInitializer(_vars)
+                    : varsOrInitializer;
             }
+
+            return tempVars;
         };
     }
 
@@ -45,7 +52,14 @@ class Theme {
     }
 
     static style<S: Object>(props: Object, styleConfig: ComponentStyle, themeVars: Object, prefix: string): {[key: $Keys<S>]: any} {
-        let varGetter: VarGetter = Theme.vars(themeVars);
+        let varGetter: VarGetter = {
+            get: (name: string) => {
+                return _vars[name] || themeVars[name];
+            },
+            has: (name: string) => {
+                return _vars.hasOwnProperty(name) || themeVars.hasOwnProperty(name);
+            }
+        };
         return buildStyle(varGetter, props, styleConfig, prefix);
     }
 }

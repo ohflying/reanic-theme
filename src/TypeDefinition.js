@@ -17,3 +17,5 @@ export type VarGetter = {
     get: (name: string) => any,
     has: (name: string) => boolean
 }
+
+export type VarsOrInitializer = Object | (GlobalVars: Object) => Object
