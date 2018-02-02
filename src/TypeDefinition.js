@@ -19,3 +19,5 @@ export type VarGetter = {
 }
 
 export type VarsOrInitializer = Object | (GlobalVars: Object) => Object
+
+export type Vars = () => {__prefix: string}

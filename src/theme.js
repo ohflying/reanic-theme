@@ -5,7 +5,7 @@
  **/
 
 import buildStyle from './buildStyle';
-import type {ComponentStyle, Watcher, Disposer, VarGetter, VarsOrInitializer} from './TypeDefinition';
+import type {ComponentStyle, Watcher, Disposer, VarGetter, VarsOrInitializer, Vars} from './TypeDefinition';
 
 let _vars = {};
 const _watchers = [];
@@ -20,7 +20,7 @@ class Theme {
         _watchers.forEach(watcher => watcher());
     }
 
-    static vars(varsOrInitializer: VarsOrInitializer, prefix: ?string = null): () => Object {
+    static vars(varsOrInitializer: VarsOrInitializer, prefix: ?string = null): Vars {
         let tempVars = null;
 
         Theme.watch(() => {
@@ -53,16 +53,17 @@ class Theme {
         };
     }
 
-    static style<S: Object>(props: Object, styleConfig: ComponentStyle, themeVars: Object): {[key: $Keys<S>]: any} {
+    static style<S: Object>(props: Object, styleConfig: ComponentStyle, themeVars: Vars): {[key: $Keys<S>]: any} {
+        let vars = themeVars();
         let varGetter: VarGetter = {
             get: (name: string) => {
-                return _vars[name] || themeVars[name];
+                return _vars[name] || vars[name];
             },
             has: (name: string) => {
-                return _vars.hasOwnProperty(name) || themeVars.hasOwnProperty(name);
+                return _vars.hasOwnProperty(name) || vars.hasOwnProperty(name);
             }
         };
-        return buildStyle(varGetter, props, styleConfig, themeVars.__prefix);
+        return buildStyle(varGetter, props, styleConfig, vars.__prefix);
     }
 }
 
