@@ -50,7 +50,7 @@ export default function connectStyle<S: Object>(Component: Class<React$Component
 
             tryResetStyle(props: any) {
                 let nextStyle = Theme.style(props, styleConfig, themeVars);
-                if (_.isEqual(nextStyle, this.state.styles)) {
+                if (!_.isEqual(nextStyle, this.state.styles)) {
                     this.setState({
                         styles: nextStyle
                     });
