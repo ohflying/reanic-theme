@@ -72,6 +72,6 @@ export default function connectStyle<S: Object>(Component: Class<React$Component
             }
         }
 
-        return hoistStatics(Component, StyleComponent);
+        return hoistStatics(StyleComponent, Component);
     };
 }
