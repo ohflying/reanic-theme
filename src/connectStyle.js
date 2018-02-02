@@ -8,7 +8,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import hoistStatics from 'hoist-non-react-statics';
+import mergeReactStatic from './mergeReactStatic';
 import Theme from './theme';
 import type {Disposer, ComponentStyle} from './TypeDefinition';
 
@@ -72,6 +72,6 @@ export default function connectStyle<S: Object>(Component: Class<React$Component
             }
         }
 
-        return hoistStatics(StyleComponent, Component);
+        return mergeReactStatic(StyleComponent, Component);
     };
 }
