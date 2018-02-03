@@ -13,7 +13,7 @@ import Theme from './theme';
 import type {Disposer, ComponentStyle} from './TypeDefinition';
 
 export default function connectStyle<S: Object>(Component: Class<React$Component<*>>, styleConfig: ComponentStyle): (themeVars: Object) => {[$Keys<S>]: any} {
-    return function wrap<S: Object>(themeVars: Object): Class<React$Component<*>> {
+    return function wrap<S: Object>(themeVars: Object): React.PureComponent<any, any> {
         class StyleComponent extends React.PureComponent<any, any> {
             static propTypes = {
                 styles: PropTypes.object
