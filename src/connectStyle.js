@@ -1,6 +1,6 @@
 /**
  * Author: Jeejen.Dong
- * Date  : 2018/1/31
+ * Date  : 2018/2/7
  *
  * @flow
  **/
@@ -8,13 +8,13 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import Theme from './Theme';
 import mergeReactStatic from './mergeReactStatic';
-import Theme from './theme';
-import type {Disposer, ComponentStyle} from './TypeDefinition';
+import type {Connecter, ReactComponent, StyleSheetGetter} from './TypeDefinition';
 
-export default function connectStyle<S: Object>(Component: Class<React$Component<*>>, styleConfig: ComponentStyle): (themeVars: Object) => Class<React$PureComponent<any, any>> {
-    return function wrap<S: Object>(themeVars: Object): Class<React$PureComponent<any, any>> {
-        class StyleComponent extends React.PureComponent<any, any> {
+export default function connectStyle(WrapComponent: ReactComponent): Connecter {
+    return function connect(styleSheetGetter: StyleSheetGetter): ReactComponent {
+        class StyleComponent extends React.PureComponent<*, *> {
             static propTypes = {
                 styles: PropTypes.object
             };
@@ -23,48 +23,27 @@ export default function connectStyle<S: Object>(Component: Class<React$Component
                 styles: {}
             };
 
-            themeDisposer: Disposer;
-            state: { styles: {[key: $Keys<S>]: any} };
-
-            constructor(props: any, context: any) {
+            constructor(props, context) {
                 super(props, context);
 
                 this.state = {
-                    styles: Theme.style(props, styleConfig, themeVars)
+                    styles: Theme.style(styleSheetGetter, props)
                 };
             }
 
-            componentWillMount() {
-                this.themeDisposer = Theme.watch(this.onThemeWatch);
-            }
-
-            componentWillUnmount() {
-                if (this.themeDisposer) {
-                    this.themeDisposer();
-                }
-            }
-
-            componentWillReceiveProps(nextProps: any, nextContext: any) {
-                this.tryResetStyle(nextProps);
-            }
-
-            tryResetStyle(props: any) {
-                let nextStyle = Theme.style(props, styleConfig, themeVars);
-                if (!_.isEqual(nextStyle, this.state.styles)) {
+            componentWillReceiveProps(nextProps, nextContext) {
+                let nextStyles = Theme.style(styleSheetGetter, nextProps);
+                if (_.isEqual(this.state.styles, nextStyles)) {
                     this.setState({
-                        styles: nextStyle
+                        styles: nextStyles
                     });
                 }
             }
 
-            onThemeWatch = () => {
-                this.tryResetStyle(this.props);
-            };
-
             render() {
                 let styles = _.merge(this.state.styles, this.props.styles);
                 return (
-                    <Component
+                    <WrapComponent
                         {...this.props}
                         styles={styles}
                     />
@@ -72,6 +51,6 @@ export default function connectStyle<S: Object>(Component: Class<React$Component
             }
         }
 
-        return mergeReactStatic(StyleComponent, Component);
+        return mergeReactStatic(StyleComponent, WrapComponent);
     };
 }

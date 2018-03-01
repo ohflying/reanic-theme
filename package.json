@@ -4,8 +4,15 @@
   "main": "index.js",
   "author": "ohflying",
   "license": "MIT",
+  "scripts": {
+    "flow": "flow check",
+    "test": "babel-node test/test.js",
+    "jest": "jest test.js"
+  },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-flow": "^6.23.0",
     "eslint": "^4.3.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-flowtype": "^2.35.0",
@@ -14,14 +21,15 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.1.0",
     "eslint-plugin-standard": "^3.0.1",
-    "flow-bin": "^0.57.3"
+    "flow-bin": "0.57",
+    "jest": "^22.2.1"
   },
   "dependencies": {
     "hoist-non-react-statics": "^2.3.1",
     "lodash": "^4.17.4"
   },
   "peerDependencies": {
-    "react": "*",
-    "prop-types": "*"
+    "prop-types": "*",
+    "react": "*"
   }
 }

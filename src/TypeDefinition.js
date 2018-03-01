@@ -1,23 +1,18 @@
 /**
  * Author: Jeejen.Dong
- * Date  : 2018/2/1
+ * Date  : 2018/2/8
  *
  * @flow
  **/
 
-export type StyleConfig = Array<StyleConfig> | Object | string;
+export type ReactComponent = Class<React$Component<*, *>>;
 
-export type ComponentStyle = {[string]: StyleConfig};
-
-export type Watcher = () => void;
+export type StyleSheetGetter = () => Object;
 
 export type Disposer = () => void;
 
-export type VarGetter = {
-    get: (name: string) => any,
-    has: (name: string) => boolean
-}
+export type Watcher = () => void;
 
-export type VarsOrInitializer = Object | (GlobalVars: Object) => Object
+export type VarsOrInitializer = Object | (GlobalVars: Object) => Object;
 
-export type Vars = () => {__prefix: string}
+export type Connecter = (styleSheetGetter: StyleSheetGetter) => ReactComponent;

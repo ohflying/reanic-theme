@@ -5,6 +5,7 @@
  * fork hoist-non-react-statics
  **/
 
+/*
 let REACT_STATICS = {
     childContextTypes: true,
     contextTypes: true,
@@ -15,6 +16,7 @@ let REACT_STATICS = {
     propTypes: true,
     type: true
 };
+*/
 
 let KNOWN_STATICS = {
     name: true,

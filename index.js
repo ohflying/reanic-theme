@@ -5,7 +5,7 @@
  * @flow
  **/
 
-import Theme from './src/theme';
+import Theme from './src/Theme';
 import connectStyle from './src/connectStyle';
 
 export {
