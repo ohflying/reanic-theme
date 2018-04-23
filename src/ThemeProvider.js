@@ -21,6 +21,10 @@ export default class ThemeProvider extends React.PureComponent<*, *> {
     constructor(props: any, context: any) {
         super(props, context);
 
+        this.state = {
+            theme: this.props.theme
+        };
+
         Theme.setTheme(this.props.theme);
     }
 

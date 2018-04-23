@@ -33,7 +33,7 @@ export default function connectStyle(WrapComponent: ReactComponent): Connecter {
 
             componentWillReceiveProps(nextProps, nextContext) {
                 let nextStyles = Theme.style(styleSheetGetter, nextProps);
-                if (_.isEqual(this.state.styles, nextStyles)) {
+                if (!_.isEqual(this.state.styles, nextStyles)) {
                     this.setState({
                         styles: nextStyles
                     });
